@@ -27,6 +27,6 @@ continueDisplayBoard([L1|L2], N) :- print('   - - - - - - - - - - - - - - - - ')
                         N1 is N+1,
                        continueDisplayBoard(L2, N1).
 
-displayBoard(L) :- print('  | A | B | C | D | E | F | G | H |'),
+displayBoard(L) :- nl, print('  | A | B | C | D | E | F | G | H |'),
                     nl, continueDisplayBoard(L, 1).
 
