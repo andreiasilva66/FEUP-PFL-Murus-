@@ -24,9 +24,9 @@ continueDisplayBoard([],0) :- print('   - - - - - - - - - - - - - - - - ').
 
 continueDisplayBoard([L1|L2], N) :- print('   - - - - - - - - - - - - - - - - '),
                         nl, drawLine(L1,N), nl,
-                        N1 is N-1,
+                        N1 is N+1,
                        continueDisplayBoard(L2, N1).
 
-displayBoard(L) :- print(' |  A  B  C  D  E  F  G  H  |'),
-                    nl, continueDisplayBoard(L, 7).
+displayBoard(L) :- print('  | A | B | C | D | E | F | G | H |'),
+                    nl, continueDisplayBoard(L, 1).
 
