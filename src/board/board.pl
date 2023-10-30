@@ -11,28 +11,26 @@ create_board([['X','X','X','X','X','X','X','X'],
             ['O','O','O','O','O','O','O','O']
             ]).
 
-drawLine([]) :- print(' | ').
+drawLine([]) :- !.
 
-
-drawLine([E1|E2]) :- print(' | '), print(E1),
+drawLine([E1|E2]) :- print(E1), write(' | '),
                         drawLine(E2).
 
-drawLine([E1|E2], N) :- print(N), print(' | '), print(E1),
+drawLine([E1|E2], N) :- write(N), write(' | '), write(E1), write(' | '),
                         drawLine(E2).
 
+continueDisplayBoard([],_) :- !.
 
-continueDisplayBoard([],0) :- print('   - - - - - - - - - - - - - - - - ').
-
-
-
-
-continueDisplayBoard([L1|L2], N) :- print('   - - - - - - - - - - - - - - - - '),
+continueDisplayBoard([L1|L2], N) :- 
                         nl, drawLine(L1,N), nl,
+                        write('   - - - - - - - - - - - - - - - - '),
                         N1 is N+1,
                        continueDisplayBoard(L2, N1).
 
-displayBoard(L) :- nl, print('  | A | B | C | D | E | F | G | H |'),
-                    nl, continueDisplayBoard(L, 1).
+displayBoard([H|T]) :- write('\n   - - - - - - - - - - - - - - - - \n'),
+                        write('  | A | B | C | D | E | F | G | H |\n'),
+                        write('   - - - - - - - - - - - - - - - - '),
+                        continueDisplayBoard([H|T], 1).
 
 replace([_|T], 1, X, [X|T]) :- !.
 replace([H|T], I, X, [H|R]) :- I > 1,
@@ -70,4 +68,6 @@ check_final_tile(Board, Player, X2, Y2) :-
     Cell = 'O', Player = 1 -> true;
     true -> false).
 
-new_move(Board, Player, X, Y, X2, Y2, NewBoard)
+getPiece(Board, X, Y, Piece):-
+    nth1(X, Board, Row),
+    nth1(Y, Row, Piece).
