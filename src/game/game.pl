@@ -38,12 +38,62 @@ check_move(Board, Player, New_Board):-
     read(Y),
     write('Direction: '),nl,
     read(Dir),
-    nth0(Board, )
-    check_valid_move(Board, Player, X, Y, X2, Y2, New_Board).
+    check_valid_move(Board, Player, X, Y, Dir).
 
     removePiece(Board, X, Y, New_Board),
     placePiece(New_Board, 'X', X, Y, Final_Board),
     displayBoard(Final_Board).
 
 
-check_valid_move()
+check_valid_move(Board, Player, X, Y, Dir) :-
+    (
+        Dir = 'T', New_X is X, New_Y is Y+1;
+        Dir = 'L', New_X is X-1, New_Y is Y;
+        Dir = 'D', New_X is X, New_Y is Y-1;
+        Dir = 'R', New_X is X+1, New_Y is Y;
+        Dir = 'TL', New_X is X - 1, New_Y is Y  1;
+        Dir = 'TR', New_X is X  1, New_Y is Y + 1;
+        Dir = 'DL', New_X is X - 1, New_Y is Y - 1;
+        Dir = 'DR', New_X is X + 1, New_Y is Y - 1
+    ),
+    New_X >= 0, New_X < 8, New_Y >= 0, New_Y < 8,
+    getPiece(Board, X, Y, Piece),
+    Player = 0 -> (
+        Piece = 'X' -> (
+            getPiece(Board, New_X, New_Y, Dest),
+            Dest = ' ' -> (
+                removePiece(Board, X, Y, New_Board),
+                placePiece(New_Board, 'X', New_X, New_Y, Final_Board),
+                displayBoard(Final_Board)
+            )
+            Dest = 'O'-> write('Invalid Move'), nl.
+            Dest = 'o' -> (
+                removePiece(Board, X, Y, New_Board),
+                placePiece(New_Board, 'x', New_X, New_Y, Final_Board),
+                displayBoard(Final_Board)
+            )
+        )
+        Piece = 'x' -> (
+         write('Invalid Move')   
+        )
+    ),
+    Player = 1 -> (
+        Piece = 'O' -> (
+            getPiece(Board, New_X, New_Y, Dest),
+            Dest = ' ' -> (
+                removePiece(Board, X, Y, New_Board),
+                placePiece(New_Board, 'O', New_X, New_Y, Final_Board),
+                displayBoard(Final_Board)
+            )
+            Dest = 'X'-> write('Invalid Move'), nl.
+            Dest = 'x' -> (
+                removePiece(Board, X, Y, New_Board),
+                placePiece(New_Board, 'o', New_X, New_Y, Final_Board),
+                displayBoard(Final_Board)
+            )
+        )
+        Piece = 'o' -> (
+            write('Invalid Move')      
+        )
+    ).
+    

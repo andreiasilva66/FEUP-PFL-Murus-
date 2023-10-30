@@ -49,3 +49,7 @@ removePiece(Board, X, Y, NewBoard) :-
                         nth1(Y, Board, Line),
                         replace(Line, X, ' ', NewLine),
                         replace(Board, Y, NewLine, NewBoard).
+
+getPiece(Board, X, Y, Piece):-
+    nth1(X, Board, Row),
+    nth1(Y, Row, Piece).
