@@ -49,3 +49,25 @@ removePiece(Board, X, Y, NewBoard) :-
                         nth1(Y, Board, Line),
                         replace(Line, X, ' ', NewLine),
                         replace(Board, Y, NewLine, NewBoard).
+
+letter_to_index(Letter, Index) :-
+    char_code(Letter, Code),
+    Index is Code - 65.
+
+check_initial_tile(Board, Player, X, Y) :-
+    nth0(YIndex, Board, Row),
+    nth0(XIndex, Row, Piece),
+    (Player = 0, Piece = 'X') ;
+    (Player = 1, Piece = 'O').
+
+
+check_final_tile(Board, Player, X2, Y2) :-
+    nth0(Y2, Board, Row),            
+    nth0(X2, Row, Cell),               
+
+    (Cell = ' ' -> true;
+    Cell = 'X', Player = 0 -> true;
+    Cell = 'O', Player = 1 -> true;
+    true -> false).
+
+new_move(Board, Player, X, Y, X2, Y2, NewBoard)
