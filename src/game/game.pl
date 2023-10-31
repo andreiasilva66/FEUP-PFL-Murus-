@@ -1,4 +1,4 @@
-:-consult 'src/game/board.pl'.
+:-consult 'src/board/board.pl'.
 :-consult 'src/menu/menu.pl'.
 
 
@@ -97,4 +97,12 @@ check_valid_move(Board, Player, X, Y, Dir) :-
             write('Invalid Move')      
         )
     ).
+
+move(GameState, Move, NewGameState).
+
     
+valid_moves(GameState, Player, ListOfMoves) :-
+    findall(Move, move(GameState, Move, NewGameState), Moves).
+
+
+game_over(GameState, Winner).

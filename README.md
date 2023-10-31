@@ -1,4 +1,19 @@
-# Murus Gallicus
+# PFL First Practical Assignment 
+
+## Game 
+
+Murus Gallicus
+
+## Authors 
+
+- Andreia Filipa Gonçalves Silva up202108769 (50%)
+- Miguel Morais Dionísio up202108788 (50%)
+*Murus Gallicus_7*
+
+# Installation and Execution
+
+# Description of the game
+
 Murus Gallicus is a two-player board game invented by Phil Leduc in 2009.
 It's played on a 8x7 board.
 There are two players: Light (Romans) and Dark (Gauls), each having 16 stones of the corresponding color.
@@ -7,6 +22,22 @@ There are two players: Light (Romans) and Dark (Gauls), each having 16 stones of
 
 The objective of Murus Gallicus game is to reach the opposite row with one of the player's stones or leave the opponent without legal moves.
 
-# Authors
-- Andreia Silva up202108769
-- Miguel Dionísio up202108788
+# Game Logic
+
+## Internal Game State Representation
+
+## Game State Visualization
+
+## Move Validation and Execution
+
+## List of Valid Moves
+
+## End of Game
+
+## Game State Evaluation
+
+## Computer plays
+
+# Conclusions
+
+# Bibliography

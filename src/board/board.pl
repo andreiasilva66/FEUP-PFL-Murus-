@@ -27,10 +27,10 @@ continueDisplayBoard([L1|L2], N) :-
                         N1 is N+1,
                        continueDisplayBoard(L2, N1).
 
-displayBoard([H|T]) :- write('\n   - - - - - - - - - - - - - - - - \n'),
-                        write('  | A | B | C | D | E | F | G | H |\n'),
+display_game(GameState) :- write('\n   - - - - - - - - - - - - - - - - \n'),
+                        write('  | A | B | C | D | E | F | G | H |\n'),    
                         write('   - - - - - - - - - - - - - - - - '),
-                        continueDisplayBoard([H|T], 1).
+                        continueDisplayBoard(GameState, 1).
 
 replace([_|T], 1, X, [X|T]) :- !.
 replace([H|T], I, X, [H|R]) :- I > 1,
@@ -71,3 +71,39 @@ check_final_tile(Board, Player, X2, Y2) :-
 getPiece(Board, X, Y, Piece):-
     nth1(X, Board, Row),
     nth1(Y, Row, Piece).
+
+isEmpty(Board, X, Y) :-
+    nth0(Y, Board, Row),
+    nth0(X, Row, ' ').
+
+
+% Calculates the change in X direction
+dx(X1, X2, DX) :- DX is X2 - X1.
+
+% Calculates the change in Y direction
+dy(Y1, Y2, DY) :- DY is Y2 - Y1.
+
+
+% Predicate to check if a move is valid for Player 0
+isValidMove(Board, 0, X, Y, X2, Y2) :-
+    dx(X, X2, DX),
+    dy(Y, Y2, DY),
+    (withinBoard(X2, Y2), isEmpty(Board, X2, Y2);
+    withinBoard(X2, Y2), adjacentPiece(Board, X2, Y2, DX, DY, 'x')).
+
+movableWall(Board, X, Y, DX, DY, Piece) :-
+    nth0(Y, Board, Row),
+    nth0(X, Row, Piece),
+    X2 is X + DX,
+    Y2 is Y + DY,
+    withinBoard(X2, Y2),
+    isEmpty(Board, X2, Y2).
+
+% Predicate to check if a move is valid for Player 1
+isValidMove(Board, 1, X, Y, X2, Y2) :-
+    dx(X, X2, DX),
+    dy(Y, Y2, DY),
+    (withinBoard(X2, Y2), isEmpty(Board, X2, Y2);
+    withinBoard(X2, Y2), adjacentPiece(Board, X, Y, DX, DY, 'o')).
+
+

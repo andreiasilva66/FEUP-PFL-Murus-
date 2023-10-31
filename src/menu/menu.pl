@@ -82,3 +82,29 @@ print_instructions :-
     print('   Good luck and have fun!                                      '), nl,
     print('                                                                '), nl,
     print('================================================================'), nl.
+
+print_game_over_menu(0) :- % Prints the menu to choose the mode
+    nl,
+    print('================================================'), nl,
+    print('                                                '), nl,
+    print('                   GAME OVER                    '), nl,
+    print('                                                '), nl,
+    print('                  Player 1 won                  '), nl,
+    print('                                                '), nl,
+    print('                 1 - Play Again                 '), nl,
+    print('                                                '), nl,
+    print('                                                '), nl,
+    print('================================================'), nl.
+
+print_game_over_menu(2) :- % Prints the menu to choose the mode
+    nl,
+    print('================================================'), nl,
+    print('                                                '), nl,
+    print('                   GAME OVER                    '), nl,
+    print('                                                '), nl,
+    print('                  Player 2 won                  '), nl,
+    print('                                                '), nl,
+    print('                 1 - Play Again                 '), nl,
+    print('                                                '), nl,
+    print('                                                '), nl,
+    print('================================================'), nl.
