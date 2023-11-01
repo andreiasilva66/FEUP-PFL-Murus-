@@ -98,11 +98,12 @@ check_valid_move(Board, Player, X, Y, Dir) :-
         )
     ).
 
-move(GameState, Move, NewGameState).
+
+
+move(GameState, Player, Move, NewGameState).
 
     
-valid_moves(GameState, Player, ListOfMoves) :-
-    findall(Move, move(GameState, Move, NewGameState), Moves).
+
 
 
 game_over(GameState, Winner).
