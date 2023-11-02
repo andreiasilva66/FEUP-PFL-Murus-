@@ -53,8 +53,8 @@ letter_to_index(Letter, Index) :-
     Index is Code - 65.
 
 check_initial_tile(Board, Player, X, Y) :-
-    nth0(YIndex, Board, Row),
-    nth0(XIndex, Row, Piece),
+    nth0(Y, Board, Row),
+    nth0(X, Row, Piece),
     (Player = 0, Piece = 'X') ;
     (Player = 1, Piece = 'O').
 
@@ -86,14 +86,6 @@ dy(Y1, Y2, DY) :- DY is Y2 - Y1.
 % Calculates the absolute value
 abs(X, ABX) :- (X >= 0, ABX is X); (X < 0, ABX is -X).
 
-
-% Predicate to check if a move is valid for Player 0
-isValidMove(Board, 0, X, Y, X2, Y2) :-
-    dx(X, X2, DX),
-    dy(Y, Y2, DY),
-    (withinBoard(X2, Y2), isEmpty(Board, X2, Y2);
-    withinBoard(X2, Y2), adjacentPiece(Board, X2, Y2, DX, DY, 'x')).
-
 movableWall(Board, X, Y, DX, DY, Piece) :-
     nth0(Y, Board, Row),
     nth0(X, Row, Piece),
@@ -101,6 +93,13 @@ movableWall(Board, X, Y, DX, DY, Piece) :-
     Y2 is Y + DY,
     withinBoard(X2, Y2),
     isEmpty(Board, X2, Y2).
+
+% Predicate to check if a move is valid for Player 0
+isValidMove(Board, 0, X, Y, X2, Y2) :-
+    dx(X, X2, DX),
+    dy(Y, Y2, DY),
+    (withinBoard(X2, Y2), isEmpty(Board, X2, Y2);
+    withinBoard(X2, Y2), adjacentPiece(Board, X2, Y2, DX, DY, 'x')).
 
 % Predicate to check if a move is valid for Player 1
 isValidMove(Board, 1, X, Y, X2, Y2) :-
