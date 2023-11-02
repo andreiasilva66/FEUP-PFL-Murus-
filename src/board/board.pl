@@ -28,7 +28,7 @@ continueDisplayBoard([L1|L2], N) :-
                        continueDisplayBoard(L2, N1).
 
 display_game(GameState) :- write('\n   - - - - - - - - - - - - - - - - \n'),
-                        write('  | A | B | C | D | E | F | G | H |\n'),    
+                        write('  | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |\n'),    
                         write('   - - - - - - - - - - - - - - - - '),
                         continueDisplayBoard(GameState, 1).
 
