@@ -28,7 +28,7 @@ continueDisplayBoard([L1|L2], N) :-
                        continueDisplayBoard(L2, N1).
 
 display_game(GameState) :- write('\n   - - - - - - - - - - - - - - - - \n'),
-                        write('  | A | B | C | D | E | F | G | H |\n'),    
+                        write('  | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |\n'),    
                         write('   - - - - - - - - - - - - - - - - '),
                         continueDisplayBoard(GameState, 1).
 
@@ -53,8 +53,8 @@ letter_to_index(Letter, Index) :-
     Index is Code - 65.
 
 check_initial_tile(Board, Player, X, Y) :-
-    nth0(YIndex, Board, Row),
-    nth0(XIndex, Row, Piece),
+    nth0(Y, Board, Row),
+    nth0(X, Row, Piece),
     (Player = 1, Piece = 'X') ;
     (Player = 2, Piece = 'O').
 
@@ -87,13 +87,6 @@ dy(Y1, Y2, DY) :- DY is Y2 - Y1.
 abs(X, ABX) :- (X >= 0, ABX is X); (X < 0, ABX is -X).
 
 
-% % Predicate to check if a move is valid for Player 0
-% isValidMove(Board, 1, X, Y, X2, Y2) :-
-%     dx(X, X2, DX),
-%     dy(Y, Y2, DY),
-%     (withinBoard(X2, Y2), isEmpty(Board, X2, Y2);
-%     withinBoard(X2, Y2), adjacentPiece(Board, X2, Y2, DX, DY, 'x')).
-
 % movableWall(Board, X, Y, DX, DY, Piece) :-
 %     nth0(Y, Board, Row),
 %     nth0(X, Row, Piece),
@@ -101,6 +94,13 @@ abs(X, ABX) :- (X >= 0, ABX is X); (X < 0, ABX is -X).
 %     Y2 is Y + DY,
 %     withinBoard(X2, Y2),
 %     isEmpty(Board, X2, Y2).
+
+% % Predicate to check if a move is valid for Player 0
+% isValidMove(Board, 0, X, Y, X2, Y2) :-
+%     dx(X, X2, DX),
+%     dy(Y, Y2, DY),
+%     (withinBoard(X2, Y2), isEmpty(Board, X2, Y2);
+%     withinBoard(X2, Y2), adjacentPiece(Board, X2, Y2, DX, DY, 'x')).
 
 % % Predicate to check if a move is valid for Player 1
 % isValidMove(Board, 1, X, Y, X2, Y2) :-
