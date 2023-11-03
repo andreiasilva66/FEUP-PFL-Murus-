@@ -55,8 +55,8 @@ letter_to_index(Letter, Index) :-
 check_initial_tile(Board, Player, X, Y) :-
     nth0(YIndex, Board, Row),
     nth0(XIndex, Row, Piece),
-    (Player = 0, Piece = 'X') ;
-    (Player = 1, Piece = 'O').
+    (Player = 1, Piece = 'X') ;
+    (Player = 2, Piece = 'O').
 
 
 check_final_tile(Board, Player, X2, Y2) :-
@@ -64,8 +64,8 @@ check_final_tile(Board, Player, X2, Y2) :-
     nth0(X2, Row, Cell),               
 
     (Cell = ' ' -> true;
-    Cell = 'X', Player = 0 -> true;
-    Cell = 'O', Player = 1 -> true;
+    Cell = 'X', Player = 1 -> true;
+    Cell = 'O', Player = 2 -> true;
     true -> false).
 
 getPiece(Board, X, Y, Piece):-
@@ -87,29 +87,29 @@ dy(Y1, Y2, DY) :- DY is Y2 - Y1.
 abs(X, ABX) :- (X >= 0, ABX is X); (X < 0, ABX is -X).
 
 
-% Predicate to check if a move is valid for Player 0
-isValidMove(Board, 0, X, Y, X2, Y2) :-
-    dx(X, X2, DX),
-    dy(Y, Y2, DY),
-    (withinBoard(X2, Y2), isEmpty(Board, X2, Y2);
-    withinBoard(X2, Y2), adjacentPiece(Board, X2, Y2, DX, DY, 'x')).
+% % Predicate to check if a move is valid for Player 0
+% isValidMove(Board, 1, X, Y, X2, Y2) :-
+%     dx(X, X2, DX),
+%     dy(Y, Y2, DY),
+%     (withinBoard(X2, Y2), isEmpty(Board, X2, Y2);
+%     withinBoard(X2, Y2), adjacentPiece(Board, X2, Y2, DX, DY, 'x')).
 
-movableWall(Board, X, Y, DX, DY, Piece) :-
-    nth0(Y, Board, Row),
-    nth0(X, Row, Piece),
-    X2 is X + DX,
-    Y2 is Y + DY,
-    withinBoard(X2, Y2),
-    isEmpty(Board, X2, Y2).
+% movableWall(Board, X, Y, DX, DY, Piece) :-
+%     nth0(Y, Board, Row),
+%     nth0(X, Row, Piece),
+%     X2 is X + DX,
+%     Y2 is Y + DY,
+%     withinBoard(X2, Y2),
+%     isEmpty(Board, X2, Y2).
 
-% Predicate to check if a move is valid for Player 1
-isValidMove(Board, 1, X, Y, X2, Y2) :-
-    dx(X, X2, DX),
-    dy(Y, Y2, DY),
-    (withinBoard(X2, Y2), isEmpty(Board, X2, Y2);
-    withinBoard(X2, Y2), adjacentPiece(Board, X, Y, DX, DY, 'o')).
+% % Predicate to check if a move is valid for Player 1
+% isValidMove(Board, 1, X, Y, X2, Y2) :-
+%     dx(X, X2, DX),
+%     dy(Y, Y2, DY),
+%     (withinBoard(X2, Y2), isEmpty(Board, X2, Y2);
+%     withinBoard(X2, Y2), adjacentPiece(Board, X, Y, DX, DY, 'o')).
 
-validate_move(GameState, 0, (X1,Y1)-(X2,Y2)) :-
+validate_move(GameState, 1, (X1,Y1)-(X2,Y2)) :-
     dx(X1, X2, DX),
     dy(Y1, Y2, DY),
     abs(DX, ABX),
@@ -122,7 +122,7 @@ validate_move(GameState, 0, (X1,Y1)-(X2,Y2)) :-
     (getPiece(GameState, (X2+DX), (Y2+DY), Adj), 
     Dest = 'x' , Adj = ' ')).
 
-validate_move(GameState, 1, (X1,Y1)-(X2,Y2)) :-
+validate_move(GameState, 2, (X1,Y1)-(X2,Y2)) :-
     dx(X1, X2, DX),
     dy(Y1, Y2, DY),
     abs(DX, ABX),

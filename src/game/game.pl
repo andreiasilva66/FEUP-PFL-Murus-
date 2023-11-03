@@ -24,14 +24,14 @@ play_pvp:-
 
 
 game_cycle(Board, Round):-
-    Player is Round mod 2,
+    Player is (Round mod 2)+1,
     check_move(Board, Player, New_Board),
     game_cycle(New_Board, Player).
 
 
 check_move(Board, Player, New_Board):-
-    Player = 0 -> print('Player 1 turn. Please Input current piece coordinates, and directions (T, L, D, R, TL, TR, DL, DR)'), nl;
-    Player = 1 -> print('Player 2 turn. Please Input current piece coordinates, and directions (T, L, D, R, TL, TR, DL, DR)'), nl,
+    Player = 1 -> print('Player 1 turn. Please Input current piece coordinates, and directions (T, L, D, R, TL, TR, DL, DR)'), nl;
+    Player = 2 -> print('Player 2 turn. Please Input current piece coordinates, and directions (T, L, D, R, TL, TR, DL, DR)'), nl,
     write('Piece Line: '),nl,
     read(X),
     write('Piece Column: '),nl,
@@ -59,7 +59,7 @@ check_valid_move(Board, Player, X, Y, Dir) :-
     ),
     New_X >= 0, New_X < 8, New_Y >= 0, New_Y < 8,
     getPiece(Board, X, Y, Piece),
-    Player = 0 -> (
+    Player = 1 -> (
         Piece = 'X' -> (
             getPiece(Board, New_X, New_Y, Dest),
             Dest = ' ' -> (
@@ -78,7 +78,7 @@ check_valid_move(Board, Player, X, Y, Dir) :-
          write('Invalid Move')   
         )
     ),
-    Player = 1 -> (
+    Player = 2 -> (
         Piece = 'O' -> (
             getPiece(Board, New_X, New_Y, Dest),
             Dest = ' ' -> (
