@@ -33,12 +33,12 @@ display_game(GameState) :- write('\n   - - - - - - - - - - - - - - - - \n'),
                         continueDisplayBoard(GameState, 1).
 
 replace([_|T], 1, X, [X|T]) :- !.
-replace([H|T], I, X, [H|R]) :- I > 1,
+replace([H|T], I, X, [H|R]) :- 
                     NI is I-1,
                     replace(T, NI, X, R).
 
 placePiece(Board, Piece, X, Y, NewBoard) :- 
-                        nth1(Y, Board, Line),
+                        nth0(Y, Board, Line),
                         replace(Line, X, Piece, NewLine),
                         replace(Board, Y, NewLine, NewBoard).
 
