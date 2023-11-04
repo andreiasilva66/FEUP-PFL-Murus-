@@ -21,7 +21,7 @@ randomComputerTurn(Board, Player, NewBoard) :-
         getPiece(Board, X2, Y2, Dest),
         Dest = ' ' -> (
                 removePiece(Board, X, Y, New_Board),
-                placePiece(New_Board, 'X', New_X, New_Y, Final_Board),
+                placePiece(New_Board, 'X', X2, Y2, Final_Board),
                 displayBoard(Final_Board)
             )
         

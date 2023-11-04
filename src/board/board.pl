@@ -31,15 +31,17 @@ display_game(GameState) :- write('\n   - - - - - - - - - - - - - - - - \n'),
                         write('   - - - - - - - - - - - - - - - - '),
                         continueDisplayBoard(GameState, 1).
 
-replace([_|T], 1, X, [X|T]) :- !.
+replace([H|T], 0, X, [X|T]) :- !.
 replace([H|T], I, X, [H|R]) :- 
                     NI is I-1,
                     replace(T, NI, X, R).
 
 placePiece(Board, Piece, X, Y, NewBoard) :- 
-                        nth0(Y, Board, Line),
-                        replace(Line, X, Piece, NewLine),
-                        replace(Board, Y, NewLine, NewBoard).
+                        Y1 is Y-1,
+                        X1 is X-1,
+                        nth0(Y1, Board, Line),
+                        replace(Line, X1, Piece, NewLine),
+                        replace(Board, Y1, NewLine, NewBoard).
 
 
 removePiece(Board, X, Y, NewBoard) :- 
