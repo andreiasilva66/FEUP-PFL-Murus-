@@ -179,20 +179,20 @@ execute_move(GameState, 2, (X1,Y1)-(X2,Y2), NewGameState) :-
    % empty cell
    (Dest = ' ' -> 
        removePiece(GameState, X1, Y1, GameState2),
-       placePiece(GameState2, 'X', X2, Y2, NewGameState)
+       placePiece(GameState2, 'O', X2, Y2, NewGameState)
    ;
        % enemy wall
-       (Dest = 'o' -> 
+       (Dest = 'x' -> 
            removePiece(GameState, X2, Y2, GameState2),
-           placePiece(GameState2, 'x', X1, Y1, NewGameState)
+           placePiece(GameState2, 'o', X1, Y1, NewGameState)
        ;
            % player wall
-           (Dest = 'x' -> 
+           (Dest = 'o' -> 
                dx(X1, X2, DX), dy(Y1, Y2, DY),
                XAdj is X2+DX, YAdj is Y2+DY,
                removePiece(GameState, X1, Y1, GameState2),
-               placePiece(GameState2, 'X', X2, Y2, GameState3),
-               placePiece(GameState3, 'x', XAdj, YAdj, NewGameState)
+               placePiece(GameState2, 'O', X2, Y2, GameState3),
+               placePiece(GameState3, 'o', XAdj, YAdj, NewGameState)
            )
        )
    ).
