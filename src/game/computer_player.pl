@@ -5,18 +5,6 @@
 choose_move(GameState, Player, 1, Move) :-
     valid_moves(GameState, Player, ListOfMoves),
     random_member(Move, ListOfMoves).
-    
-
-
-
-
-
-
-
-
-
-
-
 
 
     
