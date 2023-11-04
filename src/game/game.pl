@@ -1,5 +1,6 @@
 :- consult('../board/board.pl').
 :- consult('../menu/menu.pl').
+:- consult('../game/utils.pl').
 /*:- consult('computer_player.pl').*/
 
 

@@ -1,7 +1,5 @@
 :- use_module(library(lists)).
 
-:- consult('../game/utils.pl').
-
 
 create_board([['X','X','X','X','X','X','X','X'],
             [' ',' ',' ',' ',' ',' ',' ',' '],
@@ -123,7 +121,8 @@ validate_move(GameState, 1, (X1,Y1)-(X2,Y2)) :-
     getPiece(GameState, X1, Y1, Org),
     (Org = 'X'),
     getPiece(GameState, X2, Y2, Dest),
-    (Dest = ' '; 
+    (Dest = ' ';
+     
     ( XAdj is X2+DX, YAdj is Y2+DY,
     getPiece(GameState, XAdj, YAdj, Adj), 
     Dest = 'x' , Adj = ' ')).
@@ -143,6 +142,7 @@ validate_move(GameState, 2, (X1,Y1)-(X2,Y2)) :-
     getPiece(GameState, X2, Y2, Dest),
     getPiece(GameState, (X2+DX), (Y2+DY), Adj),
     (Dest = ' '; 
+    Dest = 'x';
     (XAdj is X2+DX, YAdj is Y2+DY,
     getPiece(GameState, XAdj, YAdj, Adj), 
     Dest = 'o' , Adj = ' ')).
@@ -151,7 +151,7 @@ valid_moves(GameState, Player, ListOfMoves):-
   findall((X1,Y1)-(X2,Y2), (between(1, 8, X1), between(1, 7, Y1), between(1, 8, X2), between(1, 7, Y2), validate_move(GameState, Player, (X1,Y1)-(X2,Y2))), ListOfMoves).
 
 
-execute_move(GameState, Player, (X1,Y1)-(X2,Y2), NewGameState) :-
+execute_move(GameState, 1, (X1,Y1)-(X2,Y2), NewGameState) :-
     getPiece(GameState, X2, Y2, Dest),
    % empty cell
    (Dest = ' ' -> 
@@ -173,3 +173,27 @@ execute_move(GameState, Player, (X1,Y1)-(X2,Y2), NewGameState) :-
            )
        )
    ).
+
+execute_move(GameState, 2, (X1,Y1)-(X2,Y2), NewGameState) :-
+    getPiece(GameState, X2, Y2, Dest),
+   % empty cell
+   (Dest = ' ' -> 
+       removePiece(GameState, X1, Y1, GameState2),
+       placePiece(GameState2, 'X', X2, Y2, NewGameState)
+   ;
+       % enemy wall
+       (Dest = 'o' -> 
+           removePiece(GameState, X2, Y2, GameState2),
+           placePiece(GameState2, 'x', X1, Y1, NewGameState)
+       ;
+           % player wall
+           (Dest = 'x' -> 
+               dx(X1, X2, DX), dy(Y1, Y2, DY),
+               XAdj is X2+DX, YAdj is Y2+DY,
+               removePiece(GameState, X1, Y1, GameState2),
+               placePiece(GameState2, 'X', X2, Y2, GameState3),
+               placePiece(GameState3, 'x', XAdj, YAdj, NewGameState)
+           )
+       )
+   ).
+
