@@ -1,5 +1,6 @@
-:-use_module(library(lists)).
+:- use_module(library(lists)).
 
+:- consult('C:/Users/andre/murus/src/game/utils.pl').
 
 
 create_board([['X','X','X','X','X','X','X','X'],
@@ -69,8 +70,8 @@ check_final_tile(Board, Player, X2, Y2) :-
     true -> false).
 
 getPiece(Board, X, Y, Piece):-
-    nth0(Y, Board, Row),
-    nth0(X, Row, Piece).
+    nth1(Y, Board, Row),
+    nth1(X, Row, Piece).
 
 isEmpty(Board, X, Y) :-
     nth0(Y, Board, Row),
@@ -110,6 +111,10 @@ abs(X, ABX) :- (X >= 0, ABX is X); (X < 0, ABX is -X).
 %     withinBoard(X2, Y2), adjacentPiece(Board, X, Y, DX, DY, 'o')).
 
 validate_move(GameState, 1, (X1,Y1)-(X2,Y2)) :-
+    X1 > 0, X1 < 9,
+    X2 > 0, X2 < 9,
+    Y1 > 0, Y1 < 8,
+    Y2 > 0, Y2 < 8,
     dx(X1, X2, DX),
     dy(Y1, Y2, DY),
     abs(DX, ABX),
@@ -119,10 +124,15 @@ validate_move(GameState, 1, (X1,Y1)-(X2,Y2)) :-
     (Org = 'X'),
     getPiece(GameState, X2, Y2, Dest),
     (Dest = ' '; 
-    (getPiece(GameState, (X2+DX), (Y2+DY), Adj), 
+    ( XAdj is X2+DX, YAdj is Y2+DY,
+    getPiece(GameState, XAdj, YAdj, Adj), 
     Dest = 'x' , Adj = ' ')).
 
 validate_move(GameState, 2, (X1,Y1)-(X2,Y2)) :-
+    X1 > 0, X1 < 9,
+    X2 > 0, X2 < 9,
+    Y1 > 0, Y1 < 8,
+    Y2 > 0, Y2 < 8,
     dx(X1, X2, DX),
     dy(Y1, Y2, DY),
     abs(DX, ABX),
@@ -133,8 +143,9 @@ validate_move(GameState, 2, (X1,Y1)-(X2,Y2)) :-
     getPiece(GameState, X2, Y2, Dest),
     getPiece(GameState, (X2+DX), (Y2+DY), Adj),
     (Dest = ' '; 
-    (getPiece(GameState, (X2+DX), (Y2+DY), Adj), 
+    (XAdj is X2+DX, YAdj is Y2+DY,
+    getPiece(GameState, XAdj, YAdj, Adj), 
     Dest = 'o' , Adj = ' ')).
 
-valid_moves(GameState, Player, ListOfMoves) :-
-    findall(Move, validate_move(GameState, Player, Move), ListOfMoves).
+valid_moves(GameState, Player, ListOfMoves):-
+  findall((X1,Y1)-(X2,Y2), (between(1, 8, X1), between(1, 7, Y1), between(1, 8, X2), between(1, 7, Y2), validate_move(GameState, Player, (X1,Y1)-(X2,Y2))), ListOfMoves).
