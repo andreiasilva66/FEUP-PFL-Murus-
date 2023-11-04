@@ -115,7 +115,9 @@ check_valid_move(Board, Player, X, Y, Dir) :-
 
 
 
-% move(GameState, Player, Move, NewGameState).
+move(GameState, Player, Move, NewGameState) :-
+    validate_move(GameState, Player, Move),
+    execute_move(GameState,Player, Move, NewGameState).
 
     
 
