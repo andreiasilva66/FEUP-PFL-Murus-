@@ -88,28 +88,15 @@ print_instructions :-
     print('================================================================'), nl.
 
 
-print_game_over_menu(0) :- % Prints the menu to choose the mode
+print_game_over_menu(Winner) :- % Prints the game over menu
     nl,
     print('================================================'), nl,
     print('|                                              |'), nl,
     print('|                  GAME OVER                   |'), nl,
     print('|                                              |'), nl,
-    print('|                 Player 1 won                 |'), nl,
+    print('|                 Player ',Winner,' won                 |'), nl,
     print('|                                              |'), nl,
-    print('|                1 - Play Again                |'), nl,
-    print('|                                              |'), nl,
-    print('|                                              |'), nl,
-    print('================================================'), nl.
-
-print_game_over_menu(2) :- % Prints the menu to choose the mode
-    nl,
-    print('================================================'), nl,
-    print('|                                              |'), nl,
-    print('|                  GAME OVER                   |'), nl,
-    print('|                                              |'), nl,
-    print('|                 Player 2 won                 |'), nl,
-    print('|                                              |'), nl,
-    print('|                1 - Play Again                |'), nl,
-    print('|                                              |'), nl,
+    print('|                1 - Main Menu                 |'), nl,
+    print('|                2 - Exit                      |'), nl,
     print('|                                              |'), nl,
     print('================================================'), nl.
