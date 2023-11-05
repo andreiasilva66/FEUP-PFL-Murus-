@@ -22,7 +22,7 @@ play_pvc(Player, Level) :-
 game_cycle_pvc(GameState, Round, Person, Level):-
     Player is (Round mod 2)+1,
     (Player = Person ->
-        !, receive_move(X, Y, Dir, X2, Y2),
+        receive_move(X, Y, Dir, X2, Y2),
         move(GameState, Player, (X, Y)-(X2, Y2), NewGameState)
         ;(
             choose_move(GameState, Player, Level, Move),
@@ -30,8 +30,9 @@ game_cycle_pvc(GameState, Round, Person, Level):-
             sleep(3)
         )),
     display_game(NewGameState),
-    !,
-    game_cycle_pvc(NewGameState, Player, Person, Level).
+    (game_over(GameState, Winner),
+    print_game_over_menu(Winner);
+    game_cycle_pvc(NewGameState, Player, Level)).
 
 play_cvc(Level) :-
     initial_state(GameState),
