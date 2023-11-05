@@ -76,43 +76,37 @@ getPiece(Board, X, Y, Piece):-
     nth1(Y, Board, Row),
     nth1(X, Row, Piece).
 
-validate_move(GameState, 1, (X1,Y1)-(X2,Y2)) :-
+validate_move(GameState, 2, (X1,Y1)-(X2,Y2)) :-
     X1 > 0, X1 < 9,
     X2 > 0, X2 < 9,
     Y1 > 0, Y1 < 8,
     Y2 > 0, Y2 < 8,
-    dx(X1, X2, DX),
-    dy(Y1, Y2, DY),
-    abs(DX, ABX),
-    abs(DY, ABY),
+    dx(X1, X2, DX), dy(Y1, Y2, DY),
+    abs(DX, ABX), abs(DY, ABY),
     (ABX = 1, ABY = 1; ABX = 1, ABY = 0; ABX = 0, ABY = 1),
+    XAdj is X2+DX, YAdj is Y2+DY,
     getPiece(GameState, X1, Y1, Org),
     (Org = 'X'),
-    getPiece(GameState, X2, Y2, Dest),
-    (Dest = ' ';
-     Dest = 'o';
-    ( XAdj is X2+DX, YAdj is Y2+DY,
-    getPiece(GameState, XAdj, YAdj, Adj), 
-    Dest = 'x' , Adj = ' ')).
+    getPiece(GameState, X2, Y2, Dest1),
+    (Dest1 = 'o';
+    getPiece(GameState, XAdj, YAdj, Dest2),
+    (Dest1 = ' '; Dest1 = 'x') , (Dest2 = ' ' ; Dest2 = 'x')).
 
 validate_move(GameState, 2, (X1,Y1)-(X2,Y2)) :-
     X1 > 0, X1 < 9,
     X2 > 0, X2 < 9,
     Y1 > 0, Y1 < 8,
     Y2 > 0, Y2 < 8,
-    dx(X1, X2, DX),
-    dy(Y1, Y2, DY),
-    abs(DX, ABX),
-    abs(DY, ABY),
+    dx(X1, X2, DX), dy(Y1, Y2, DY),
+    abs(DX, ABX), abs(DY, ABY),
     (ABX = 1, ABY = 1; ABX = 1, ABY = 0; ABX = 0, ABY = 1),
+    XAdj is X2+DX, YAdj is Y2+DY,
     getPiece(GameState, X1, Y1, Org),
     (Org = 'O'),
-    getPiece(GameState, X2, Y2, Dest),
-    (Dest = ' '; 
-    Dest = 'x';
-    (XAdj is X2+DX, YAdj is Y2+DY,
-    getPiece(GameState, XAdj, YAdj, Adj), 
-    Dest = 'o' , Adj = ' ')).
+    getPiece(GameState, X2, Y2, Dest1),
+    (Dest1 = 'x';
+    getPiece(GameState, XAdj, YAdj, Dest2),
+    (Dest1 = ' '; Dest1 = 'o') , (Dest2 = ' ' ; Dest2 = 'o')).
 
 valid_moves(GameState, Player, ListOfMoves):-
   findall((X1,Y1)-(X2,Y2), (between(1, 8, X1), between(1, 7, Y1), between(1, 8, X2), between(1, 7, Y2), validate_move(GameState, Player, (X1,Y1)-(X2,Y2))), ListOfMoves).
