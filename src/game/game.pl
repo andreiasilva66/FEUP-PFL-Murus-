@@ -9,12 +9,16 @@ play_pvp :-
 game_cycle_pvp(GameState, Round):-
     Player is (Round mod 2)+1,
     receive_move(Player, X, Y, D),
-    move(GameState, Player, (X, Y)-D, NewGameState),
-    Round2 is Round + 1,
-    display_game(NewGameState),
-    (game_over(GameState, Winner),
-    print_game_over_menu(Winner);
-    game_cycle_pvp(NewGameState, Round2)).
+    (
+        move(GameState, Player, (X, Y)-D, NewGameState),
+        Round2 is Round + 1,
+        display_game(NewGameState),
+        (game_over(GameState, Winner),
+        print_game_over_menu(Winner);
+        game_cycle_pvp(NewGameState, Round2));
+        nl, print('\n Invalid Move.\n Try again.\n'), nl,
+        game_cycle_pvp(GameState, Round)
+    ).
 
 
 play_pvc(Player, Level) :-
@@ -23,19 +27,33 @@ play_pvc(Player, Level) :-
     game_cycle_pvc(GameState, 0, Player, Level).
 
 game_cycle_pvc(GameState, Round, Person, Level):-
-    Player is (Round mod 2)+1,
+    Player is (Round mod 2) + 1,
     (Player = Person ->
         receive_move(Player, X, Y, D),
-        move(GameState, Player, (X, Y)-D, NewGameState)
-        ;(
-            choose_move(GameState, Player, Level, Move),
-            move(GameState, Player, Move, NewGameState),
-            sleep(3)
-        )),
-    display_game(NewGameState),
-    (game_over(GameState, Winner),
-    print_game_over_menu(Winner);
-    game_cycle_pvc(NewGameState, Player, Person, Level)).
+        (
+            move(GameState, Player, (X, Y)-D, NewGameState),
+            display_game(NewGameState),
+            (game_over(NewGameState, Winner) ->
+                print_game_over_menu(Winner)
+                ;
+                game_cycle_pvc(NewGameState, Player, Person, Level)
+            )
+        ;
+        nl, print('\nInvalid Move.\nTry again.\n'), nl,
+        game_cycle_pvc(GameState, Round, Person, Level)
+        )
+    ;
+    (
+        choose_move(GameState, Player, Level, Move),
+        move(GameState, Player, Move, NewGameState),
+        sleep(3),
+        display_game(NewGameState),
+        (game_over(NewGameState, Winner) ->
+            print_game_over_menu(Winner)
+            ;
+            game_cycle_pvc(NewGameState, Player, Person, Level)
+        )
+    )).
 
 play_cvc(Level) :-
     initial_state(GameState),
@@ -94,7 +112,7 @@ game_over_menu(Winner) :-
     (
         Option = 1 -> play;
         Option = 2 -> halt;
-        write("Invalid Option"), nl, game_over_menu(Winner)
+        write('Invalid Option'), nl, game_over_menu(Winner)
     ).
 
 game_over(GameState, Winner) :-
@@ -108,7 +126,7 @@ game_over(GameState, Winner) :-
     (
         Option = 1 -> play;
         Option = 2 -> halt;
-        write("Invalid Option"), nl, game_over_menu(Winner)
+        write('Invalid Option'), nl, game_over_menu(Winner)
     ).
 
 game_over(GameState, Winner) :-
@@ -119,5 +137,5 @@ game_over(GameState, Winner) :-
     (
         Option = 1 -> play;
         Option = 2 -> halt;
-        write("Invalid Option"), nl, game_over_menu(Winner)
+        write('Invalid Option'), nl, game_over_menu(Winner)
     ).
