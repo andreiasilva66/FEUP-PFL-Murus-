@@ -34,6 +34,7 @@ game_cycle(GameState, Round):-
     Player is (Round mod 2)+1,
     receive_move(X, Y, Dir, X2, Y2),
     move(GameState, Player, (X, Y)-(X2, Y2), NewGameState),
+    display_game(NewGameState),
     game_cycle(New_Board, Player).
 
 player_turn(Player) :-
