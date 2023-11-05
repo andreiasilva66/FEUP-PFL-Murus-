@@ -8,8 +8,8 @@ play_pvp :-
 
 game_cycle_pvp(GameState, Round):-
     Player is (Round mod 2)+1,
-    receive_move(X, Y, X2, Y2),
-    move(GameState, Player, (X, Y)-(X2, Y2), NewGameState),
+    receive_move(X, Y, D),
+    move(GameState, Player, (X, Y)-D, NewGameState),
     Round2 is Round + 1,
     display_game(NewGameState),
     game_cycle_pvp(New_Board, Round2).
@@ -23,8 +23,8 @@ play_pvc(Player, Level) :-
 game_cycle_pvc(GameState, Round, Person, Level):-
     Player is (Round mod 2)+1,
     (Player = Person ->
-        receive_move(X, Y, Dir, X2, Y2),
-        move(GameState, Player, (X, Y)-(X2, Y2), NewGameState)
+        receive_move(X, Y, D),
+        move(GameState, Player, (X, Y)-D, NewGameState)
         ;(
             choose_move(GameState, Player, Level, Move),
             move(GameState, Player, Move, NewGameState),
@@ -59,7 +59,7 @@ player_turn(Player) :-
             write('\nPlayer 2 Turn'), nl
     ).
 
-receive_move(X, Y, X2, Y2):-
+receive_move(X, Y, D):-
 
     player_turn(Player),
     write('Tower Column: '),nl,
@@ -75,17 +75,7 @@ receive_move(X, Y, X2, Y2):-
     write('6 - Up-Right'), nl,
     write('7 - Down-Left'), nl,
     write('8 - Down-Right'), nl,
-    read(Dir),
-    (
-        Dir = 1 -> X2 is X, Y2 is Y-1;
-        Dir = 2 -> X2 is X, Y2 is Y+1;
-        Dir = 3 -> X2 is X-1, Y2 is Y;
-        Dir = 4 -> X2 is X+1, Y2 is Y;
-        Dir = 5 -> X2 is X-1, Y2 is Y-1;
-        Dir = 6 -> X2 is X+1, Y2 is Y-1;
-        Dir = 7 -> X2 is X-1, Y2 is Y+1;
-        Dir = 8 -> X2 is X+1, Y2 is Y+1
-    ).
+    read(D).
    
    
 
