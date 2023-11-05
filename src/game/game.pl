@@ -1,8 +1,3 @@
-:- consult('../board/board.pl').
-:- consult('../menu/menu.pl').
-:- consult('../game/utils.pl').
-:- consult('computer_player.pl').
-
 
 choose_game:-
     print_start_menu,
@@ -37,9 +32,9 @@ game_cycle(GameState, Round):-
 player_turn(Player) :-
     ( 
         Player = 1 -> 
-            write('Player 1 Turn'), nl;
+            write('\nPlayer 1 Turn'), nl;
         Player = 2 -> 
-            write('Player 2 Turn'), nl
+            write('\nPlayer 2 Turn'), nl
     ).
 
 check_move(GameState, Player, New_Board):-
@@ -119,9 +114,15 @@ check_valid_move(GameState, Player, X, Y, Dir) :-
 move(GameState, Player, Move, NewGameState) :-
     validate_move(GameState, Player, Move),
     execute_move(GameState,Player, Move, NewGameState).
-
     
 
+game_over(GameState, Winner) :-
+   reach_opposite_row(GameState, Winner).
 
+game_over(GameState, Winner) :-
+   valid_moves(GameState, 1, []),
+   Winner = 2.
 
-% game_over(GameState, Winner).
+game_over(GameState, Winner) :-
+   valid_moves(GameState, 2, []),
+   Winner = 1.

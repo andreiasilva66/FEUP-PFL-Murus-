@@ -73,43 +73,6 @@ getPiece(Board, X, Y, Piece):-
     nth1(Y, Board, Row),
     nth1(X, Row, Piece).
 
-isEmpty(Board, X, Y) :-
-    nth0(Y, Board, Row),
-    nth0(X, Row, ' ').
-
-
-% Calculates the change in X direction
-dx(X1, X2, DX) :- DX is X2 - X1.
-
-% Calculates the change in Y direction
-dy(Y1, Y2, DY) :- DY is Y2 - Y1.
-
-% Calculates the absolute value
-abs(X, ABX) :- (X >= 0, ABX is X); (X < 0, ABX is -X).
-
-
-% movableWall(Board, X, Y, DX, DY, Piece) :-
-%     nth0(Y, Board, Row),
-%     nth0(X, Row, Piece),
-%     X2 is X + DX,
-%     Y2 is Y + DY,
-%     withinBoard(X2, Y2),
-%     isEmpty(Board, X2, Y2).
-
-% % Predicate to check if a move is valid for Player 0
-% isValidMove(Board, 0, X, Y, X2, Y2) :-
-%     dx(X, X2, DX),
-%     dy(Y, Y2, DY),
-%     (withinBoard(X2, Y2), isEmpty(Board, X2, Y2);
-%     withinBoard(X2, Y2), adjacentPiece(Board, X2, Y2, DX, DY, 'x')).
-
-% % Predicate to check if a move is valid for Player 1
-% isValidMove(Board, 1, X, Y, X2, Y2) :-
-%     dx(X, X2, DX),
-%     dy(Y, Y2, DY),
-%     (withinBoard(X2, Y2), isEmpty(Board, X2, Y2);
-%     withinBoard(X2, Y2), adjacentPiece(Board, X, Y, DX, DY, 'o')).
-
 validate_move(GameState, 1, (X1,Y1)-(X2,Y2)) :-
     X1 > 0, X1 < 9,
     X2 > 0, X2 < 9,
@@ -124,7 +87,7 @@ validate_move(GameState, 1, (X1,Y1)-(X2,Y2)) :-
     (Org = 'X'),
     getPiece(GameState, X2, Y2, Dest),
     (Dest = ' ';
-     
+     Dest = 'o';
     ( XAdj is X2+DX, YAdj is Y2+DY,
     getPiece(GameState, XAdj, YAdj, Adj), 
     Dest = 'x' , Adj = ' ')).
@@ -142,7 +105,6 @@ validate_move(GameState, 2, (X1,Y1)-(X2,Y2)) :-
     getPiece(GameState, X1, Y1, Org),
     (Org = 'O'),
     getPiece(GameState, X2, Y2, Dest),
-    getPiece(GameState, (X2+DX), (Y2+DY), Adj),
     (Dest = ' '; 
     Dest = 'x';
     (XAdj is X2+DX, YAdj is Y2+DY,
@@ -158,7 +120,8 @@ execute_move(GameState, 1, (X1,Y1)-(X2,Y2), NewGameState) :-
    % empty cell
    (Dest = ' ' -> 
        removePiece(GameState, X1, Y1, GameState2),
-       placePiece(GameState2, 'X', X2, Y2, NewGameState)
+       removePiece(GameState2, X2, Y2, GameState3),
+       placePiece(GameState4, 'X', X2, Y2, NewGameState)
    ;
        % enemy wall
        (Dest = 'o' -> 
@@ -204,4 +167,11 @@ execute_move(GameState, 2, (X1,Y1)-(X2,Y2), NewGameState) :-
            )
        )
    ).
+
+reach_opposite_row(GameState, 1) :-
+   getPiece(GameState, _ , 7, 'X').
+
+reach_opposite_row(GameState, 2) :-
+   getPiece(GameState, _ , 1, 'O').
+
 
