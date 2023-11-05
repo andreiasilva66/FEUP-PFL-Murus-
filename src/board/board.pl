@@ -45,14 +45,17 @@ placePiece(Board, Piece, X, Y, NewBoard) :-
 
 
 removePiece(Board, X, Y, NewBoard) :- 
-                        nth1(Y, Board, Line),
-                        replace(Line, X, ' ', NewLine),
-                        replace(Board, Y, NewLine, NewBoard).
+                        Y1 is Y-1,
+                        X1 is X-1,
+                        nth0(Y1, Board, Line),
+                        replace(Line, X1, ' ', NewLine),
+                        replace(Board, Y1, NewLine, NewBoard).
 
+/*
 letter_to_index(Letter, Index) :-
     char_code(Letter, Code),
     Index is Code - 65.
-
+*/
 check_initial_tile(Board, Player, X, Y) :-
     nth0(Y, Board, Row),
     nth0(X, Row, Piece),
@@ -120,24 +123,20 @@ execute_move(GameState, 1, (X1,Y1)-(X2,Y2), NewGameState) :-
    % empty cell
    (Dest = ' ' -> 
        removePiece(GameState, X1, Y1, GameState2),
-       removePiece(GameState2, X2, Y2, GameState3),
-       placePiece(GameState4, 'X', X2, Y2, NewGameState)
+       placePiece(GameState2, 'X', X2, Y2, NewGameState)
    ;
        % enemy wall
        (Dest = 'o' -> 
            removePiece(GameState, X2, Y2, GameState2),
-           removePiece(GameState2, X1, Y1, GameState3),
-           placePiece(GameState3, 'x', X1, Y1, NewGameState)
+           placePiece(GameState2, 'x', X1, Y1, NewGameState)
        ;
            % player wall
            (Dest = 'x' -> 
                dx(X1, X2, DX), dy(Y1, Y2, DY),
                XAdj is X2+DX, YAdj is Y2+DY,
                removePiece(GameState, X1, Y1, GameState2),
-               removePiece(GameState2, X2, Y2, GameState2),
-               placePiece(GameState3, 'X', X2, Y2, GameState4),
-               removePiece(GameState4, XAdj, YAdj, GameState5),
-               placePiece(GameState5, 'x', XAdj, YAdj, NewGameState)
+               placePiece(GameState2, 'X', X2, Y2, GameState3),
+               placePiece(GameState3, 'x', XAdj, YAdj, NewGameState)
            )
        )
    ).
@@ -152,18 +151,15 @@ execute_move(GameState, 2, (X1,Y1)-(X2,Y2), NewGameState) :-
        % enemy wall
        (Dest = 'x' -> 
            removePiece(GameState, X2, Y2, GameState2),
-           removePiece(GameState2, X1, Y1, GameState3),
-           placePiece(GameState3, 'o', X1, Y1, NewGameState)
+           placePiece(GameState2, 'o', X1, Y1, NewGameState)
        ;
            % player wall
            (Dest = 'o' -> 
                dx(X1, X2, DX), dy(Y1, Y2, DY),
                XAdj is X2+DX, YAdj is Y2+DY,
                removePiece(GameState, X1, Y1, GameState2),
-               removePiece(GameState2, X2, Y2, GameState2),
-               placePiece(GameState3, 'O', X2, Y2, GameState4),
-               removePiece(GameState4, XAdj, YAdj, GameState5),
-               placePiece(GameState5, 'o', XAdj, YAdj, NewGameState)
+               placePiece(GameState2, 'O', X2, Y2, GameState3),
+               placePiece(GameState3, 'o', XAdj, YAdj, NewGameState)
            )
        )
    ).
