@@ -4,7 +4,6 @@
 :- consult('game/computer_player.pl').
 :- consult('game/game.pl').
 
-
 play :-
     print_start_menu,
     read(Option),
