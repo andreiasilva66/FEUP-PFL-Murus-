@@ -94,7 +94,7 @@ print_game_over_menu(Winner) :- % Prints the game over menu
     print('|                                              |'), nl,
     print('|                  GAME OVER                   |'), nl,
     print('|                                              |'), nl,
-    print('|                 Player ',Winner,' won                 |'), nl,
+    print('|                 Player '),print(Winner),print(' won                 |'), nl,
     print('|                                              |'), nl,
     print('|                1 - Main Menu                 |'), nl,
     print('|                2 - Exit                      |'), nl,

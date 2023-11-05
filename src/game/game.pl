@@ -3,16 +3,18 @@
 play_pvp :-
     initial_state(GameState),
     display_game(GameState),
-    game_cycle_pvp(GameState, 1).
+    game_cycle_pvp(GameState, 0).
 
 
 game_cycle_pvp(GameState, Round):-
     Player is (Round mod 2)+1,
-    receive_move(X, Y, D),
+    receive_move(Player, X, Y, D),
     move(GameState, Player, (X, Y)-D, NewGameState),
     Round2 is Round + 1,
     display_game(NewGameState),
-    game_cycle_pvp(New_Board, Round2).
+    (game_over(GameState, Winner),
+    print_game_over_menu(Winner);
+    game_cycle_cvc(NewGameState, Round2, Level)).
 
 
 play_pvc(Player, Level) :-
@@ -23,7 +25,7 @@ play_pvc(Player, Level) :-
 game_cycle_pvc(GameState, Round, Person, Level):-
     Player is (Round mod 2)+1,
     (Player = Person ->
-        receive_move(X, Y, D),
+        receive_move(Player, X, Y, D),
         move(GameState, Player, (X, Y)-D, NewGameState)
         ;(
             choose_move(GameState, Player, Level, Move),
@@ -60,7 +62,7 @@ player_turn(Player) :-
             write('\nPlayer 2 Turn'), nl
     ).
 
-receive_move(X, Y, D):-
+receive_move(Player, X, Y, D):-
 
     player_turn(Player),
     write('Tower Column: '),nl,
