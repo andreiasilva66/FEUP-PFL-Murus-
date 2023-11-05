@@ -14,3 +14,4 @@ dy(Y1, Y2, DY) :- DY is Y2 - Y1.
 
 % Calculates the absolute value
 abs(X, ABX) :- (X >= 0, ABX is X); (X < 0, ABX is -X).
+
