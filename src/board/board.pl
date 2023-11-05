@@ -219,4 +219,12 @@ reach_opposite_row(GameState, 2) :-
 reach_opposite_row(GameState, 2) :-
    getPiece(GameState, _ , 1, 'o').
 
+count_pieces_in_list([], _, PieceCount, PieceCount).
 
+count_pieces(GameState, Piece, PieceCount) :-
+    flatten(GameState, FlatBoard), 
+    count_pieces_in_list(FlatBoard, Piece, 0, PieceCount).
+
+count_pieces_in_list([PlayerPiece | Rest], Piece, CurrentCount, PieceCount) :-
+    (PlayerPiece = Piece -> NewCount is CurrentCount + 1; NewCount is CurrentCount),
+    count_pieces_in_list(Rest, Piece, NewCount, PieceCount).

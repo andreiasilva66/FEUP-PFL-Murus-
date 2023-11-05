@@ -5,13 +5,14 @@ between(Lower, Upper, Value) :-
    Lower < Upper,
    Next is Lower + 1,
    between(Next, Upper, Value).
+   
 
-% Calculates the change in X direction
-dx(X1, X2, DX) :- DX is X2 - X1.
+% Flatten a list of lists
+flatten([], []).
+flatten([L|Ls], Flat) :-
+    flatten(L, F),
+    flatten(Ls, Fs),
+    append(F, Fs, Flat).
 
-% Calculates the change in Y direction
-dy(Y1, Y2, DY) :- DY is Y2 - Y1.
-
-% Calculates the absolute value
-abs(X, ABX) :- (X >= 0, ABX is X); (X < 0, ABX is -X).
-
+% Flatten an atom (single element)
+flatten(X, [X]) :- atomic(X).

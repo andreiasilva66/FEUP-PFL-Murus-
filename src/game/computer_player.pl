@@ -2,34 +2,82 @@
 :-use_module(library(random)).
 
 
+% Factors to consider
+% Piece count - depending on the peace
+% Possible moves
+% Position
+% Add extra point for a game state where the computes wins
 
-count_pieces(GameState, Player, Row, Count) :-
-   nth1(Row, GameState, RowState),
-   include(=('X'), RowState, Player1Pieces),
-   length(Player1Pieces, Count).
+% Predicate to assign values to pieces based on type and row
+piece_value('X', Row, Value) :-
+    % Define values for X pieces based on row position
+    (Row = 1, Value = 1);
+    (Row = 2, Value = 2);
+    (Row = 3, Value = 3);
+    (Row = 4, Value = 5);
+    (Row = 5, Value = 7);
+    (Row = 6, Value = 10);
+    (Row = 7, Value = 15).
 
-count_pieces(GameState, Player, Row, Count) :-
-   nth1(Row, GameState, RowState),
-   count_pieces_in_row(RowState, Player, 0, Count).
+piece_value('x', Row, Value) :-
+    % Define values for X pieces based on row position
+    (Row = 1, Value = 1);
+    (Row = 2, Value = 1);
+    (Row = 3, Value = 2);
+    (Row = 4, Value = 3);
+    (Row = 5, Value = 5);
+    (Row = 6, Value = 7);
+    (Row = 7, Value = 15).
 
-count_pieces_in_row([], _, Count, Count).
+piece_value('O', Row, Value) :-
+    % Define values for X pieces based on row position
+    (Row = 1, Value = 15);
+    (Row = 2, Value = 10);
+    (Row = 3, Value = 7);
+    (Row = 4, Value = 5);
+    (Row = 5, Value = 3);
+    (Row = 6, Value = 2);
+    (Row = 7, Value = 1).
 
-count_pieces_in_row(['X'|T], 1, Acc, Count) :-
-   NewAcc is Acc + 1,
-   count_pieces_in_row(T, 1, NewAcc, Count).
+piece_value('o', Row, Value) :-
+    % Define values for X pieces based on row position
+    (Row = 1, Value = 15);
+    (Row = 2, Value = 7);
+    (Row = 3, Value = 5);
+    (Row = 4, Value = 3);
+    (Row = 5, Value = 2);
+    (Row = 6, Value = 1);
+    (Row = 7, Value = 1).
 
-count_pieces_in_row(['O'|T], 2, Acc, Count) :-
-   NewAcc is Acc + 1,
-   count_pieces_in_row(T, 2, NewAcc, Count).
-
-count_pieces_in_row([_|T], Player, Acc, Count) :-
-   count_pieces_in_row(T, Player, Acc, Count).
+calculate_piece_value(GameState, Piece, TotalValue) :-
+    % Find all positions of the specified piece in the game state and their row indices
+    findall((Piece, RowIndex), (nth1(RowIndex, GameState, Row), member(Piece, Row)), PiecesWithRow),
+    % Calculate the values for each piece and row index
+    findall(Value, (member((Piece, RowIndex), PiecesWithRow), piece_value(Piece, RowIndex, Value)), PieceValues),
+    % Sum the values in the list
+    sumlist(PieceValues, TotalValue).
 
 value(GameState, 1, Value) :-
-   count_pieces(GameState, 1, 7, Value).
+   calculate_piece_value(GameState, 'X', XTCount),
+   calculate_piece_value(GameState, 'x', XWCount),
+   calculate_piece_value(GameState, 'O', OTCount),
+   calculate_piece_value(GameState, 'o', OWCount),
+   valid_moves(GameState, 1, Moves),
+   length(Moves, MovesCount),
+   (game_over(GameState,1) , Value is 1000;
+   Value is (XTCount + XWCount - (OTCount + OWCount)*0.5 + MovesCount * 5)
+   ).
 
 value(GameState, 2, Value) :-
-   count_pieces(GameState, 2, 7, Value).
+   calculate_piece_value(GameState, 'X', XTCount),
+   calculate_piece_value(GameState, 'x', XWCount),
+   calculate_piece_value(GameState, 'O', OTCount),
+   calculate_piece_value(GameState, 'o', OWCount),
+   valid_moves(GameState, 2, Moves),
+   length(Moves, MovesCount),
+   (game_over(GameState,2) , Value is 1000;
+   Value is (OTCount + OWCount - (XTCount + XWCount)*0.5 + MovesCount * 5)
+   ).
 
 % Level 1 -> easy mode
 choose_move(GameState, Player, 1, Move) :-
@@ -37,10 +85,28 @@ choose_move(GameState, Player, 1, Move) :-
     random_member(Move, ListOfMoves).
 
 choose_move(GameState, Player, 2, Move) :-
-  valid_moves(GameState, Player, Moves),
-  findall(Value-Move, (member(Move, Moves), value(GameState, Player, Value)), ValueMoves),
-  max_member(Value-Move, ValueMoves),
-  Move = Move.
+    valid_moves(GameState, Player, Moves), % Get the valid moves
+    best_move(GameState, Player, 5, Moves, -10000, none, Move).
+
+% Base case when there are no more moves to evaluate
+best_move(_, _, _, [], BestValue, BestMove, BestMove) :- BestValue \= -10000.
+
+best_move(GameState, Player, Depth, [Move | RestMoves], BestValue, CurrBestMove, BestMove) :-
+    % Apply the move to get the new game state
+    move(GameState, Player, Move, NewGameState),
+    % Evaluate the new game state
+    value(NewGameState, Player, Value),
+    % Choose the move with the highest value
+    (Value > BestValue ->
+        NewBestValue is Value,
+        NewBestMove = Move
+    ;
+        NewBestValue is BestValue,
+        NewBestMove = CurrBestMove
+    ),
+    % Recursively evaluate the rest of the moves
+    best_move(GameState, Player, Depth, RestMoves, NewBestValue, NewBestMove, BestMove).
+
 
     
     
