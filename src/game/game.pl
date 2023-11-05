@@ -14,7 +14,7 @@ game_cycle_pvp(GameState, Round):-
     display_game(NewGameState),
     (game_over(GameState, Winner),
     print_game_over_menu(Winner);
-    game_cycle_cvc(NewGameState, Round2, Level)).
+    game_cycle_pvp(NewGameState, Round2)).
 
 
 play_pvc(Player, Level) :-
@@ -35,7 +35,7 @@ game_cycle_pvc(GameState, Round, Person, Level):-
     display_game(NewGameState),
     (game_over(GameState, Winner),
     print_game_over_menu(Winner);
-    game_cycle_pvc(NewGameState, Player, Level)).
+    game_cycle_pvc(NewGameState, Player, Person, Level)).
 
 play_cvc(Level) :-
     initial_state(GameState),
