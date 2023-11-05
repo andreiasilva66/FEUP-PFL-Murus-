@@ -51,27 +51,6 @@ removePiece(Board, X, Y, NewBoard) :-
                         replace(Line, X1, ' ', NewLine),
                         replace(Board, Y1, NewLine, NewBoard).
 
-/*
-letter_to_index(Letter, Index) :-
-    char_code(Letter, Code),
-    Index is Code - 65.
-*/
-check_initial_tile(Board, Player, X, Y) :-
-    nth0(Y, Board, Row),
-    nth0(X, Row, Piece),
-    (Player = 1, Piece = 'X') ;
-    (Player = 2, Piece = 'O').
-
-
-check_final_tile(Board, Player, X2, Y2) :-
-    nth0(Y2, Board, Row),            
-    nth0(X2, Row, Cell),               
-
-    (Cell = ' ' -> true;
-    Cell = 'X', Player = 1 -> true;
-    Cell = 'O', Player = 2 -> true;
-    true -> false).
-
 getPiece(Board, X, Y, Piece):-
     nth1(Y, Board, Row),
     nth1(X, Row, Piece).
@@ -219,12 +198,3 @@ reach_opposite_row(GameState, 2) :-
 reach_opposite_row(GameState, 2) :-
    getPiece(GameState, _ , 1, 'o').
 
-count_pieces_in_list([], _, PieceCount, PieceCount).
-
-count_pieces(GameState, Piece, PieceCount) :-
-    flatten(GameState, FlatBoard), 
-    count_pieces_in_list(FlatBoard, Piece, 0, PieceCount).
-
-count_pieces_in_list([PlayerPiece | Rest], Piece, CurrentCount, PieceCount) :-
-    (PlayerPiece = Piece -> NewCount is CurrentCount + 1; NewCount is CurrentCount),
-    count_pieces_in_list(Rest, Piece, NewCount, PieceCount).

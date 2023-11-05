@@ -2,12 +2,6 @@
 :-use_module(library(random)).
 
 
-% Factors to consider
-% Piece count - depending on the peace
-% Possible moves
-% Position
-% Add extra point for a game state where the computes wins
-
 % Predicate to assign values to pieces based on type and row
 piece_value('X', Row, Value) :-
     % Define values for X pieces based on row position
