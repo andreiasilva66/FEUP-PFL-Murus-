@@ -24,8 +24,8 @@ play :-
                     ;(
                         Option2 = 3 -> print_pcmode_menu,
                             read(Level),
-                            play_pvp(Level)
-                            ;(
+                            play_cvc(Level);
+                            (
                                 write("Invalid Option"), nl, play
                             )
                     )

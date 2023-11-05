@@ -3,7 +3,7 @@
 play_pvp :-
     initial_state(GameState),
     display_game(GameState),
-    game_cycle_pvp(GameState, 0).
+    game_cycle_pvp(GameState, 1).
 
 
 game_cycle_pvp(GameState, Round):-
@@ -42,6 +42,7 @@ play_cvc(Level) :-
 
 game_cycle_cvc(GameState, Round, Level) :-
     Player is (Round mod 2)+1,
+    player_turn(Player),
     choose_move(GameState, Player, Level, Move),
     move(GameState, Player, Move, NewGameState),
     sleep(3),
@@ -94,14 +95,37 @@ move(GameState, Player, Move, NewGameState) :-
     validate_move(GameState, Player, Move),
     execute_move(GameState,Player, Move, NewGameState).
     
+   
+game_over_menu(Winner) :-
+    print_game_over_menu(Winner),
+    read(Option),
+    (
+        Option = 1 -> play;
+        Option = 2 -> halt;
+        write("Invalid Option"), nl, game_over_menu(Winner)
+    ).
 
 game_over(GameState, Winner) :-
    reach_opposite_row(GameState, Winner).
 
 game_over(GameState, Winner) :-
    valid_moves(GameState, 1, []),
-   Winner = 2.
+   Winner = 2,
+   print_game_over_menu(Winner),
+    read(Option),
+    (
+        Option = 1 -> play;
+        Option = 2 -> halt;
+        write("Invalid Option"), nl, game_over_menu(Winner)
+    ).
 
 game_over(GameState, Winner) :-
    valid_moves(GameState, 2, []),
-   Winner = 1.
+   Winner = 1,
+   print_game_over_menu(Winner),
+    read(Option),
+    (
+        Option = 1 -> play;
+        Option = 2 -> halt;
+        write("Invalid Option"), nl, game_over_menu(Winner)
+    ).
