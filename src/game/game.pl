@@ -8,10 +8,11 @@ play_pvp :-
 
 game_cycle_pvp(GameState, Round):-
     Player is (Round mod 2)+1,
-    receive_move(X, Y, Dir, X2, Y2),
+    receive_move(X, Y, X2, Y2),
     move(GameState, Player, (X, Y)-(X2, Y2), NewGameState),
+    Round2 is Round + 1,
     display_game(NewGameState),
-    game_cycle_pvp(New_Board, Player).
+    game_cycle_pvp(New_Board, Round2).
 
 
 play_pvc(Player, Level) :-
@@ -58,26 +59,34 @@ player_turn(Player) :-
             write('\nPlayer 2 Turn'), nl
     ).
 
-receive_move(X, Y, Dir, X2, Y2):-
+receive_move(X, Y, X2, Y2):-
 
     player_turn(Player),
-    write('Piece Column: '),nl,
+    write('Tower Column: '),nl,
     read(X),
-    write('Piece Line: '),
+    write('Tower Line: '),
     read(Y),
-    write('Enter direction (N, S, E, W, NW, NE, SW, SE): '),
+    write('Direction:'), nl,
+    write('1 - Up'), nl,
+    write('2 - Down'), nl,
+    write('3 - Left'), nl,
+    write('4 - Right'), nl,
+    write('5 - Up-Left'), nl,
+    write('6 - Up-Right'), nl,
+    write('7 - Down-Left'), nl,
+    write('8 - Down-Right'), nl,
     read(Dir),
     (
-        Dir = 'N' -> (X2 is X, Y2 is Y - 1);
-        Dir = 'S' -> (X2 is X, Y2 is Y + 1);
-        Dir = 'E' -> (X2 is X + 1, Y2 is Y);
-        Dir = 'W' -> (X2 is X - 1, Y2 is Y);
-        Dir = 'NW' -> (X2 is X - 1, Y2 is Y - 1);
-        Dir = 'NE' -> (X2 is X + 1, Y2 is Y - 1);
-        Dir = 'SW' -> (X2 is X - 1, Y2 is Y + 1);
-        Dir = 'SE' -> (X2 is X + 1, Y2 is Y + 1);
-        write('Invalid Direction'), nl, receive_move(X, Y, X2, Y2)
-    ), !.
+        Dir = 1 -> X2 is X, Y2 is Y-1;
+        Dir = 2 -> X2 is X, Y2 is Y+1;
+        Dir = 3 -> X2 is X-1, Y2 is Y;
+        Dir = 4 -> X2 is X+1, Y2 is Y;
+        Dir = 5 -> X2 is X-1, Y2 is Y-1;
+        Dir = 6 -> X2 is X+1, Y2 is Y-1;
+        Dir = 7 -> X2 is X-1, Y2 is Y+1;
+        Dir = 8 -> X2 is X+1, Y2 is Y+1
+    ).
+   
    
 
 
