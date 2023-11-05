@@ -45,14 +45,17 @@ placePiece(Board, Piece, X, Y, NewBoard) :-
 
 
 removePiece(Board, X, Y, NewBoard) :- 
-                        nth1(Y, Board, Line),
-                        replace(Line, X, ' ', NewLine),
-                        replace(Board, Y, NewLine, NewBoard).
+                        Y1 is Y-1,
+                        X1 is X-1,
+                        nth0(Y1, Board, Line),
+                        replace(Line, X1, ' ', NewLine),
+                        replace(Board, Y1, NewLine, NewBoard).
 
+/*
 letter_to_index(Letter, Index) :-
     char_code(Letter, Code),
     Index is Code - 65.
-
+*/
 check_initial_tile(Board, Player, X, Y) :-
     nth0(Y, Board, Row),
     nth0(X, Row, Piece),

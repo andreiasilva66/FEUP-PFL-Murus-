@@ -1,10 +1,11 @@
 :- consult('../board/board.pl').
 :- consult('../menu/menu.pl').
 :- consult('../game/utils.pl').
-:- consult('computer_player.pl').
+/*:- consult('computer_player.pl').*/
 
 
-choose_game:-
+
+play:-
     print_start_menu,
     read(Option),
     (
@@ -31,7 +32,8 @@ play_pvp:-
 
 game_cycle(GameState, Round):-
     Player is (Round mod 2)+1,
-    check_move(GameState, Player, New_Board),
+    receive_move(X, Y, Dir, X2, Y2),
+    move(GameState, Player, (X, Y)-(X2, Y2), NewGameState),
     game_cycle(New_Board, Player).
 
 player_turn(Player) :-
@@ -42,78 +44,27 @@ player_turn(Player) :-
             write('Player 2 Turn'), nl
     ).
 
-check_move(GameState, Player, New_Board):-
+receive_move(X, Y, Dir, X2, Y2):-
 
     player_turn(Player),
-    write('Piece Line: '),nl,
-    read(X),
     write('Piece Column: '),nl,
+    read(X),
+    write('Piece Line: '),
     read(Y),
-    write('Direction: '),nl,
+    write('Enter direction (N, S, E, W, NW, NE, SW, SE): '),
     read(Dir),
-    ( 
-        check_valid_move(GameState, Player, X, Y, Dir) -> 
-            removePiece(GameState, X, Y, New_Board),
-            placePiece(New_Board, 'X', X, Y, Final_Board),
-            display_game(Final_Board)
-        ; 
-        write('Invalid move. Please try again.'), nl,
-        check_move(GameState, Player, New_Board)
-    ).
-
-
-check_valid_move(GameState, Player, X, Y, Dir) :-
     (
-        Dir = 'T' -> New_X is X, New_Y is Y+1;
-        Dir = 'L'-> New_X is X-1, New_Y is Y;
-        Dir = 'D'-> New_X is X, New_Y is Y-1;
-        Dir = 'R'-> New_X is X+1, New_Y is Y;
-        Dir = 'TL'-> New_X is X - 1, New_Y is Y + 1;
-        Dir = 'TR'-> New_X is X + 1, New_Y is Y + 1;
-        Dir = 'DL'-> New_X is X - 1, New_Y is Y - 1;
-        Dir = 'DR'-> New_X is X + 1, New_Y is Y - 1
-    ),
-    New_X > 0, New_X < 8, New_Y > 0, New_Y < 8,
-    getPiece(GameState, X, Y, Piece),
-    Player = 1 -> (
-        Piece = 'X' -> (
-            getPiece(GameState, New_X, New_Y, Dest),
-            Dest = ' ' -> (
-                removePiece(GameState, X, Y, New_Board),
-                placePiece(New_Board, 'X', New_X, New_Y, Final_Board),
-                displayBoard(Final_Board)
-            ),
-            Dest = 'O'-> (write('Invalid Move'), nl),
-            Dest = 'o' -> (
-                removePiece(GameState, X, Y, New_Board),
-                placePiece(New_Board, 'x', New_X, New_Y, Final_Board),
-                displayBoard(Final_Board)
-            )
-        ),
-        Piece = 'x' -> (
-         write('Invalid Move'),  nl   
-        )
-    ),
-    Player = 2 -> (
-        Piece = 'O' -> (
-            getPiece(GameState, New_X, New_Y, Dest),
-            Dest = ' ' -> (
-                removePiece(GameState, X, Y, New_Board),
-                placePiece(New_Board, 'O', New_X, New_Y, Final_Board),
-                displayBoard(Final_Board)
-            ),
-            Dest = 'X'-> (write('Invalid Move'), nl),
-            Dest = 'x' -> (
-                removePiece(GameState, X, Y, New_Board),
-                placePiece(New_Board, 'o', New_X, New_Y, Final_Board),
-                displayBoard(Final_Board)
-            )
-        ),
-        Piece = 'o' -> (
-            write('Invalid Move')      
-        )
+        Dir = 'N' -> X2 is X, Y2 is Y + 1;
+        Dir = 'S' -> X2 is X, Y2 is Y - 1;
+        Dir = 'E' -> X2 is X + 1, Y2 is Y;
+        Dir = 'W' -> X2 is X - 1, Y2 is Y;
+        Dir = 'NW' -> X2 is X - 1, Y2 is Y + 1;
+        Dir = 'NE' -> X2 is X + 1, Y2 is Y + 1;
+        Dir = 'SW' -> X2 is X - 1, Y2 is Y - 1;
+        Dir = 'SE' -> X2 is X + 1, Y2 is Y - 1;
+        write('Invalid Direction'), nl, receive_move(X, Y, Dir, X2, Y2)
     ).
-
+   
 
 
 move(GameState, Player, Move, NewGameState) :-
