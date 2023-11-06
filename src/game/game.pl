@@ -13,7 +13,7 @@ game_cycle_pvp(GameState, Round):-
         move(GameState, Player, (X, Y)-D, NewGameState),
         Round2 is Round + 1,
         display_game(NewGameState),
-        (game_over(GameState, Winner),
+        (game_over(NewGameState, Winner),
         print_game_over_menu(Winner);
         game_cycle_pvp(NewGameState, Round2));
         nl, print('\n Invalid Move.\n Try again.\n'), nl,
@@ -39,7 +39,7 @@ game_cycle_pvc(GameState, Round, Person, Level):-
                 game_cycle_pvc(NewGameState, Player, Person, Level)
             )
         ;
-        nl, print('\nInvalid Move.\nTry again.\n'), nl,
+        print('\nInvalid Move.\nTry again.\n'), 
         game_cycle_pvc(GameState, Round, Person, Level)
         )
     ;
@@ -68,7 +68,7 @@ game_cycle_cvc(GameState, Round, Level) :-
     move(GameState, Player, Move, NewGameState),
     sleep(3),
     display_game(NewGameState),
-    (game_over(GameState, Winner),
+    (game_over(NewGameState, Winner),
     print_game_over_menu(Winner);
     game_cycle_cvc(NewGameState, Player, Level)).
 
