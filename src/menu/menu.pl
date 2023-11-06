@@ -1,4 +1,4 @@
-
+/* Contains all menus of the game */
 
 
 print_start_menu:-  % Prints Start menu

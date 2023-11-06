@@ -5,7 +5,7 @@
 :- consult('game/game.pl').
 
 
-
+% Main function
 play :-
     print_start_menu,
     read(Option),

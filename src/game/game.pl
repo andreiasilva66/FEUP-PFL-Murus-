@@ -1,5 +1,6 @@
 :- use_module(library(system)).
 
+% Player vs Player initialization and game cycle
 play_pvp :-
     initial_state(GameState),
     display_game(GameState),
@@ -21,6 +22,8 @@ game_cycle_pvp(GameState, Round):-
     ).
 
 
+
+% Player vs Computer initialization and game cycle
 play_pvc(Player, Level) :-
     initial_state(GameState),
     display_game(GameState),
@@ -56,6 +59,8 @@ game_cycle_pvc(GameState, Round, Person, Level):-
         )
     )).
 
+
+% Computer vs Computer initialization and game cycle
 play_cvc(Level) :-
     initial_state(GameState),
     display_game(GameState),
@@ -72,7 +77,7 @@ game_cycle_cvc(GameState, Round, Level) :-
     game_over_menu(Winner);
     game_cycle_cvc(NewGameState, Player, Level)).
 
-
+% Displays player turn
 player_turn(Player) :-
     ( 
         Player = 1 -> 
@@ -81,6 +86,7 @@ player_turn(Player) :-
             write('\nPlayer 2 Turn'), nl
     ).
 
+% Receives a move by the player
 receive_move(Player, X, Y, D):-
 
     player_turn(Player),
@@ -101,12 +107,12 @@ receive_move(Player, X, Y, D):-
    
    
 
-
+% Calls functions to validate and execute a move
 move(GameState, Player, Move, NewGameState) :-
     validate_move(GameState, Player, Move),
     execute_move(GameState,Player, Move, NewGameState).
     
-   
+% Displays the game over menu and reads the input
 game_over_menu(Winner) :-
     print_game_over_menu(Winner),
     read(Option),
@@ -116,6 +122,7 @@ game_over_menu(Winner) :-
         write('Invalid Option'), nl, game_over_menu(Winner)
     ).
 
+% Predicates to end the game
 game_over(GameState, Winner) :-
    reach_opposite_row(GameState, Winner).
 

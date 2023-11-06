@@ -2,7 +2,7 @@
 :-use_module(library(random)).
 
 
-% Predicate to assign values to pieces based on type and row
+% Predicates to assign values to pieces based on type and row
 piece_value('X', Row, Value) :-
     % Define values for X pieces based on row position
     (Row = 1, Value = 1);
@@ -43,14 +43,14 @@ piece_value('o', Row, Value) :-
     (Row = 6, Value = 1);
     (Row = 7, Value = 1).
 
+
+% Predicates to calculate the value of a piece
 calculate_piece_value(GameState, Piece, TotalValue) :-
-    % Find all positions of the specified piece in the game state and their row indices
     findall((Piece, RowIndex), (nth1(RowIndex, GameState, Row), member(Piece, Row)), PiecesWithRow),
-    % Calculate the values for each piece and row index
     findall(Value, (member((Piece, RowIndex), PiecesWithRow), piece_value(Piece, RowIndex, Value)), PieceValues),
-    % Sum the values in the list
     sumlist(PieceValues, TotalValue).
 
+% Predicates to calculate the value of a game state
 value(GameState, 1, Value) :-
    calculate_piece_value(GameState, 'X', XTCount),
    calculate_piece_value(GameState, 'v', XWCount),
@@ -73,16 +73,17 @@ value(GameState, 2, Value) :-
    Value is (OTCount + OWCount - (XTCount + XWCount)*0.5 + MovesCount * 5)
    ).
 
-% Level 1 -> easy mode
+% Random mode
 choose_move(GameState, Player, 1, Move) :-
     valid_moves(GameState, Player, ListOfMoves),
     random_member(Move, ListOfMoves).
 
+% Greedy Mode
 choose_move(GameState, Player, 2, Move) :-
     valid_moves(GameState, Player, Moves), % Get the valid moves
     best_move(GameState, Player, 5, Moves, -10000, none, Move).
 
-% Base case when there are no more moves to evaluate
+% Predicates to calculate the best move possible
 best_move(_, _, _, [], BestValue, BestMove, BestMove) :- BestValue \= -10000.
 
 best_move(GameState, Player, Depth, [Move | RestMoves], BestValue, CurrBestMove, BestMove) :-
