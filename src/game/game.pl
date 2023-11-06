@@ -125,4 +125,4 @@ game_over(GameState, Winner) :-
 
 game_over(GameState, Winner) :-
    valid_moves(GameState, 2, []),
-   Winner = 1..
+   Winner = 1.
