@@ -78,7 +78,12 @@ validate_move(GameState, 1, (X,Y)-D) :-
     getPiece(GameState, X1, Y1, Dest1),
     (Dest1 = 'o';
     getPiece(GameState, X2, Y2, Dest2),
-    (Dest1 = ' '; Dest1 = 'v') , (Dest2 = ' ' ; Dest2 = 'v')).
+    (
+        (Dest1 = ' ', Dest2 = ' ');
+        (Dest1 = 'v', Dest2 = 'v');
+        (Dest1 = 'v', Dest2 = ' ');
+        (Dest1 = ' ', Dest2 = 'v')
+    )).
 
 validate_move(GameState, 2, (X,Y)-D) :-
     X > 0, X < 9,
@@ -103,7 +108,12 @@ validate_move(GameState, 2, (X,Y)-D) :-
     getPiece(GameState, X1, Y1, Dest1),
     (Dest1 = 'v';
     getPiece(GameState, X2, Y2, Dest2),
-    (Dest1 = ' '; Dest1 = 'o') , (Dest2 = ' ' ; Dest2 = 'o')).
+    (
+        (Dest1 = ' ', Dest2 = ' ');
+        (Dest1 = 'o', Dest2 = 'o');
+        (Dest1 = 'o', Dest2 = ' ');
+        (Dest1 = ' ', Dest2 = 'o')
+    )).
 
 valid_moves(GameState, Player, ListOfMoves):-
   findall((X,Y)-D, (between(1, 8, X), between(1, 7, Y), between(1, 8, D), validate_move(GameState, Player, (X,Y)-D)), ListOfMoves).
@@ -163,7 +173,7 @@ execute_move(GameState, 2, (X,Y)-D, NewGameState) :-
    % empty cell
    (Dest1 = 'v' -> 
         removePiece(GameState, X1, Y1, GameState2),
-        placePiece(GameState2, '8', X, Y, NewGameState)
+        placePiece(GameState2, 'o', X, Y, NewGameState)
    ;
         getPiece(GameState, X2, Y2, Dest2),
         removePiece(GameState, X, Y, GameState2),

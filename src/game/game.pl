@@ -14,7 +14,7 @@ game_cycle_pvp(GameState, Round):-
         Round2 is Round + 1,
         display_game(NewGameState),
         (game_over(NewGameState, Winner),
-        print_game_over_menu(Winner);
+        game_over_menu(Winner);
         game_cycle_pvp(NewGameState, Round2));
         nl, print('\n Invalid Move.\n Try again.\n'), nl,
         game_cycle_pvp(GameState, Round)
@@ -34,7 +34,7 @@ game_cycle_pvc(GameState, Round, Person, Level):-
             move(GameState, Player, (X, Y)-D, NewGameState),
             display_game(NewGameState),
             (game_over(NewGameState, Winner) ->
-                print_game_over_menu(Winner)
+                game_over_menu(Winner)
                 ;
                 game_cycle_pvc(NewGameState, Player, Person, Level)
             )
@@ -50,7 +50,7 @@ game_cycle_pvc(GameState, Round, Person, Level):-
         sleep(3),
         display_game(NewGameState),
         (game_over(NewGameState, Winner) ->
-            print_game_over_menu(Winner)
+            game_over_menu(Winner)
             ;
             game_cycle_pvc(NewGameState, Player, Person, Level)
         )
@@ -69,7 +69,7 @@ game_cycle_cvc(GameState, Round, Level) :-
     sleep(3),
     display_game(NewGameState),
     (game_over(NewGameState, Winner),
-    print_game_over_menu(Winner);
+    game_over_menu(Winner);
     game_cycle_cvc(NewGameState, Player, Level)).
 
 
@@ -121,22 +121,8 @@ game_over(GameState, Winner) :-
 
 game_over(GameState, Winner) :-
    valid_moves(GameState, 1, []),
-   Winner = 2,
-   print_game_over_menu(Winner),
-    read(Option),
-    (
-        Option = 1 -> play;
-        Option = 2 -> halt;
-        write('Invalid Option'), nl, game_over_menu(Winner)
-    ).
+   Winner = 2.
 
 game_over(GameState, Winner) :-
    valid_moves(GameState, 2, []),
-   Winner = 1,
-   print_game_over_menu(Winner),
-    read(Option),
-    (
-        Option = 1 -> play;
-        Option = 2 -> halt;
-        write('Invalid Option'), nl, game_over_menu(Winner)
-    ).
+   Winner = 1..
