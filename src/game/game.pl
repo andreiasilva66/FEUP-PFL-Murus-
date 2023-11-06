@@ -44,6 +44,7 @@ game_cycle_pvc(GameState, Round, Person, Level):-
         )
     ;
     (
+        player_turn(Player),
         choose_move(GameState, Player, Level, Move),
         move(GameState, Player, Move, NewGameState),
         sleep(3),

@@ -7,7 +7,7 @@ initial_state([['X','X','X','X','X','X','X','X'],
             [' ',' ',' ',' ',' ',' ',' ',' '],
             [' ',' ',' ',' ',' ',' ',' ',' '],
             [' ',' ',' ',' ',' ',' ',' ',' '],
-            ['O','O','O','O','O','O','O','O']
+            ['8','8','8','8','8','8','8','8']
             ]).
 
 drawLine([]) :- !.
@@ -22,13 +22,13 @@ continueDisplayBoard([],_) :- !.
 
 continueDisplayBoard([L1|L2], N) :- 
                         nl, drawLine(L1,N), nl,
-                        write('   - - - - - - - - - - - - - - - - '),
+                        write('- - - - - - - - - - - - - - - - - -'),
                         N1 is N+1,
                        continueDisplayBoard(L2, N1).
 
 display_game(GameState) :- write('\n   - - - - - - - - - - - - - - - - \n'),
                         write('  | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |\n'),    
-                        write('   - - - - - - - - - - - - - - - - '),
+                        write('- - - - - - - - - - - - - - - - - -'),
                         continueDisplayBoard(GameState, 1).
 
 replace([H|T], 0, X, [X|T]) :- !.
@@ -78,7 +78,7 @@ validate_move(GameState, 1, (X,Y)-D) :-
     getPiece(GameState, X1, Y1, Dest1),
     (Dest1 = 'o';
     getPiece(GameState, X2, Y2, Dest2),
-    (Dest1 = ' '; Dest1 = 'x') , (Dest2 = ' ' ; Dest2 = 'x')).
+    (Dest1 = ' '; Dest1 = 'v') , (Dest2 = ' ' ; Dest2 = 'v')).
 
 validate_move(GameState, 2, (X,Y)-D) :-
     X > 0, X < 9,
@@ -99,9 +99,9 @@ validate_move(GameState, 2, (X,Y)-D) :-
     X2 > 0, X2 < 9, Y2 > 0, Y2 < 8,
 
     getPiece(GameState, X, Y, Org),
-    (Org = 'O'),
+    (Org = '8'),
     getPiece(GameState, X1, Y1, Dest1),
-    (Dest1 = 'x';
+    (Dest1 = 'v';
     getPiece(GameState, X2, Y2, Dest2),
     (Dest1 = ' '; Dest1 = 'o') , (Dest2 = ' ' ; Dest2 = 'o')).
 
@@ -125,24 +125,24 @@ execute_move(GameState, 1, (X,Y)-D, NewGameState) :-
    % empty cell
    (Dest1 = 'o' -> 
         removePiece(GameState, X1, Y1, GameState2),
-        placePiece(GameState2, 'x', X, Y, NewGameState)
+        placePiece(GameState2, 'v', X, Y, NewGameState)
    ;
         getPiece(GameState, X2, Y2, Dest2),
         removePiece(GameState, X, Y, GameState2),
        % enemy wall
        (Dest1 = ' ' -> 
-           placePiece(GameState2, 'x', X1, Y1, GameState3)
+           placePiece(GameState2, 'v', X1, Y1, GameState3)
        ;
            % player wall
-           (Dest1 = 'x' -> 
+           (Dest1 = 'v' -> 
                placePiece(GameState2, 'X', X1, Y1, GameState3)
            )
        ),
        (Dest2 = ' ' -> 
-           placePiece(GameState3, 'x', X2, Y2, NewGameState)
+           placePiece(GameState3, 'v', X2, Y2, NewGameState)
        ;
            % player wall
-           (Dest2 = 'x' -> 
+           (Dest2 = 'v' -> 
                placePiece(GameState3, 'X', X2, Y2, NewGameState)
            )
        )
@@ -161,9 +161,9 @@ execute_move(GameState, 2, (X,Y)-D, NewGameState) :-
 
     getPiece(GameState, X1, Y1, Dest1),
    % empty cell
-   (Dest1 = 'x' -> 
+   (Dest1 = 'v' -> 
         removePiece(GameState, X1, Y1, GameState2),
-        placePiece(GameState2, 'o', X, Y, NewGameState)
+        placePiece(GameState2, '8', X, Y, NewGameState)
    ;
         getPiece(GameState, X2, Y2, Dest2),
         removePiece(GameState, X, Y, GameState2),
@@ -173,7 +173,7 @@ execute_move(GameState, 2, (X,Y)-D, NewGameState) :-
        ;
            % player wall
            (Dest1 = 'o' -> 
-               placePiece(GameState2, 'O', X1, Y1, GameState3)
+               placePiece(GameState2, '8', X1, Y1, GameState3)
            )
        ),
        (Dest2 = ' ' -> 
@@ -181,7 +181,7 @@ execute_move(GameState, 2, (X,Y)-D, NewGameState) :-
        ;
            % player wall
            (Dest2 = 'o' -> 
-               placePiece(GameState3, 'O', X2, Y2, NewGameState)
+               placePiece(GameState3, '8', X2, Y2, NewGameState)
            )
        )
    ).
@@ -190,10 +190,10 @@ reach_opposite_row(GameState, 1) :-
    getPiece(GameState, _ , 7, 'X').
 
 reach_opposite_row(GameState, 1) :-
-   getPiece(GameState, _ , 7, 'x').
+   getPiece(GameState, _ , 7, 'v').
 
 reach_opposite_row(GameState, 2) :-
-   getPiece(GameState, _ , 1, 'O').
+   getPiece(GameState, _ , 1, '8').
 
 reach_opposite_row(GameState, 2) :-
    getPiece(GameState, _ , 1, 'o').

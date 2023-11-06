@@ -26,7 +26,7 @@ play :-
                             read(Level),
                             play_cvc(Level);
                             (
-                                write("Invalid Option"), nl, play
+                                write('Invalid Option'), nl, play
                             )
                     )
                 )
@@ -35,8 +35,8 @@ play :-
         Option = 2 -> (
             print_instructions,
             read(Back), Back = 1,
-            play
+            play; play
         );
         Option = 3 -> abort;
-        write("Invalid Option"), nl, play
+        write('Invalid Option'), nl, play
     ).

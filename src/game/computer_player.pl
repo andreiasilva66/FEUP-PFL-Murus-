@@ -13,7 +13,7 @@ piece_value('X', Row, Value) :-
     (Row = 6, Value = 10);
     (Row = 7, Value = 15).
 
-piece_value('x', Row, Value) :-
+piece_value('v', Row, Value) :-
     % Define values for X pieces based on row position
     (Row = 1, Value = 1);
     (Row = 2, Value = 1);
@@ -23,7 +23,7 @@ piece_value('x', Row, Value) :-
     (Row = 6, Value = 7);
     (Row = 7, Value = 15).
 
-piece_value('O', Row, Value) :-
+piece_value('8', Row, Value) :-
     % Define values for X pieces based on row position
     (Row = 1, Value = 15);
     (Row = 2, Value = 10);
@@ -53,8 +53,8 @@ calculate_piece_value(GameState, Piece, TotalValue) :-
 
 value(GameState, 1, Value) :-
    calculate_piece_value(GameState, 'X', XTCount),
-   calculate_piece_value(GameState, 'x', XWCount),
-   calculate_piece_value(GameState, 'O', OTCount),
+   calculate_piece_value(GameState, 'v', XWCount),
+   calculate_piece_value(GameState, '8', OTCount),
    calculate_piece_value(GameState, 'o', OWCount),
    valid_moves(GameState, 1, Moves),
    length(Moves, MovesCount),
@@ -64,8 +64,8 @@ value(GameState, 1, Value) :-
 
 value(GameState, 2, Value) :-
    calculate_piece_value(GameState, 'X', XTCount),
-   calculate_piece_value(GameState, 'x', XWCount),
-   calculate_piece_value(GameState, 'O', OTCount),
+   calculate_piece_value(GameState, 'v', XWCount),
+   calculate_piece_value(GameState, '8', OTCount),
    calculate_piece_value(GameState, 'o', OWCount),
    valid_moves(GameState, 2, Moves),
    length(Moves, MovesCount),
